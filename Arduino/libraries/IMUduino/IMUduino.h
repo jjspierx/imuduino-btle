@@ -21,37 +21,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#ifndef FreeIMU_h
-#define FreeIMU_h
+#ifndef IMUduino_h
+#define IMUduino_h
 
 
-#define FREEIMU_v04
+#define IMUDUINO_v04
 
 // *** No configuration needed below this line ***
 
 
-#define FREEIMU_LIB_VERSION "20140717"
+#define IMUDUINO_LIB_VERSION "20140717"
 
-#define FREEIMU_DEVELOPER "Femtoduino"
+#define IMUDUINO_DEVELOPER "Femtoduino"
 
-#define FREEIMU_FREQ "16 MHz"
+#define IMUDUINO_FREQ "16 MHz"
 
 
 // board IDs
 
-#define FREEIMU_ID "FreeIMU v0.4"
+#define IMUDUINO_ID "IMUduino v0.4"
 
 
-
-
-
-#define HAS_MPU6050() (defined(FREEIMU_v04))
-#define HAS_MS5611() (defined(FREEIMU_v04))
-#define HAS_HMC5883L() (defined(FREEIMU_v04))
-
-
-#define IS_9DOM() (defined(FREEIMU_v04))
-#define HAS_AXIS_ALIGNED() (defined(FREEIMU_v04))
+#define HAS_AXIS_ALIGNED() (defined(IMUDUINO_v04))
 
 
 
@@ -63,26 +54,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <EEPROM.h>
 #endif
 
-#define FREEIMU_EEPROM_BASE 0x0A
-#define FREEIMU_EEPROM_SIGNATURE 0x19
+#define IMUDUINO_EEPROM_BASE 0x0A
+#define IMUDUINO_EEPROM_SIGNATURE 0x19
 
-//#if FREEIMU_VER <= 3
-#if HAS_MPU6050()
+
   #include <Wire.h>
   #include "I2Cdev.h"
   #include "MPU60X0.h"
   #define FIMU_ACCGYRO_ADDR MPU60X0_DEFAULT_ADDRESS
-#endif
 
 
-#if HAS_MS5611()
   #include <MS561101BA.h>
   #define FIMU_BARO_ADDR MS561101BA_ADDR_CSB_LOW
-#endif
 
-#if HAS_HMC5883L()
   #include <HMC58X3.h>
-#endif
+
 
 // HMC5843 address is fixed so don't bother to define it
 
@@ -108,22 +94,10 @@ class IMUduino
     #endif
     void zeroGyro();
     void getRawValues(int * raw_values);
-    void getValues(float * values);
-    void getQ(float * q);
-    void getEuler(float * angles);
-    void getYawPitchRoll(float * ypr);
-    void getEulerRad(float * angles);
-    void getYawPitchRollRad(float * ypr);
-
-      float getBaroAlt();
-      float getBaroAlt(float sea_press);
-
-    void gravityCompensateAcc(float * acc, float * q);
+    
     
 
     HMC58X3 magn;
-    
-    
     
     MPU60X0 accgyro;
       
@@ -158,5 +132,5 @@ void arr3_rad_to_deg(float * arr);
 
 
 
-#endif // FreeIMU_h
+#endif // IMUduino_h
 
