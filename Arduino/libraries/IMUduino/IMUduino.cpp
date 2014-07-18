@@ -1,5 +1,5 @@
 /*
-FreeIMU.cpp - A libre and easy to use orientation sensing library for Arduino
+IMUDuino.cpp - Originally based on FreeIMU.cpp - A libre and easy to use orientation sensing library for Arduino
 Copyright (C) 2011-2012 Fabio Varesano <fabio at varesano dot net>
 
 Development of this code has been supported by the Department of Computer Science,

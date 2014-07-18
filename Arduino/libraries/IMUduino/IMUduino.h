@@ -1,5 +1,5 @@
 /*
-FreeIMU.h - A libre and easy to use orientation sensing library for Arduino
+IMUduino.h - Originally based on FreeIMU.h - A libre and easy to use orientation sensing library for Arduino
 Copyright (C) 2011 Fabio Varesano <fabio at varesano dot net>
 
 Development of this code has been supported by the Department of Computer Science,
