@@ -198,7 +198,7 @@ void IMUduino::calLoad() {
  * Populates raw_values with the raw_values from the sensors
 */
 void IMUduino::getRawValues(int * raw_values) {
-  
+    accgyro.getMotion6(&raw_values[0], &raw_values[1], &raw_values[2], &raw_values[3], &raw_values[4], &raw_values[5]);
     magn.getValues(&raw_values[6], &raw_values[7], &raw_values[8]);
 
     int temp, press;
