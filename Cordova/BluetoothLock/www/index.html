@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>IMUduino - Bluetooth Lock Example</title>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+    <script src="lib/jquery.js"></script>
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+
+
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+
+      <!-- cordova script (this will be a 404 during development) -->
+      <script src="cordova.js"></script>
+  </head>
+  <body ng-app="starter">
+
+    <ion-pane ng-controller="MainCtrl">
+      <ion-header-bar class="bar-stable">
+
+        <button ng-click="onStartScanButton()" class="button button-icon ion-plus">
+            START SCAN
+        </button>
+
+        <button ng-click="onStopScanButton()" class="button button-icon ion-plus">
+            STOP SCAN
+        </button>
+      </ion-header-bar>
+      <ion-content>
+          <h1>BLE Scan</h1>
+
+
+
+          <p id="scan-status">{{display_status}}</p>
+
+          <ion-list id="found-devices">
+            <ion-item ng-repeat="device in devices">
+                <strong>{{device.name}}</strong><br />
+                {{device.address}}<br />
+                {{device.rssi}}<br />
+                <div style="background:rgb(0,255,0); height:20px; width:{{getRssiWidth(device)}}%"></div>
+            </ion-item>
+          </ion-list>
+      </ion-content>
+    </ion-pane>
+  </body>
+</html>
