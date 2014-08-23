@@ -39,6 +39,7 @@
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/index.html \
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/css/style.css \
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/lib/ionic \
+/home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/lib/ng-cordova.js \
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/lib/jquery.js \
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/lib/ionic/fonts \
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/lib/ionic/css \
