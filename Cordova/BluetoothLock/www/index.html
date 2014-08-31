@@ -29,32 +29,38 @@
   <ion-pane ng-controller="MainCtrl">
     <ion-header-bar class="bar-stable">
 
-      <button ng-click="onStartScanButton()" class="button button-icon ion-plus">
+      <button class="button button-icon ion-plus">
         START SCAN
       </button>
 
-      <button ng-click="onStopScanButton()" class="button button-icon ion-plus">
-        STOP SCAN
+      <button ng-click="Spp.disconnect()" class="button button-icon ion-plus">
+        STOP
       </button>
     </ion-header-bar>
     <ion-content>
-      <h1>BLE Scan <i ng-show="isScanning" class="icon ion-looping"></i></h1>
-
-
-
-      <p id="scan-status">{{display_status}}</p>
       
-
+      <div>
+        
+      </div>
+      
+      
+      <h1>BLE Scan <i ng-if="isScanning === true" class="icon ion-loading-c"></i><i ng-if="isConnecting === true" class="icon ion-radio-waves"></i></h1>
+      <h3>is scanning</h3>
+      <div>{{Spp.isScanning}}</div>
+      <h3>scanned devices</h3>
+      <div>{{Spp.scannedDevices.length}}</div>
+      
+      
+      
       <ion-list id="found-devices">
-        <ion-item ng-repeat="device in devices">
+        <ion-item ng-repeat="device in Spp.scannedDevices">
           <strong>{{device.name}}</strong><br />
           {{device.address}}<br />
           {{device.rssi}}<br />
           <div style="background:rgb(0,255,0); height:20px; width:{{getRssiWidth(device)}}%"></div>
+          
         </ion-item>
       </ion-list>
-      
-      <p>{{debug}}</p>
     </ion-content>
   </ion-pane>
 </body>
