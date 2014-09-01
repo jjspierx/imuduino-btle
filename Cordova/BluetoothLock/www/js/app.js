@@ -87,7 +87,7 @@ angular.module('starter', ['ionic', 'nRF8001'])
           $scope.UART = UART;
           $scope.sendData = function (device) {
             console.log('Writing!!!');
-            device.write([1]);
+            device.write([49]);
           };
 
           ionic.ready(function() {
