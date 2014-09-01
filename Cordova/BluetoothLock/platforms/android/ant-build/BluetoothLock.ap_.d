@@ -41,6 +41,7 @@
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/lib/ionic \
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/lib/ng-cordova.js \
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/lib/jquery.js \
+/home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/lib/nRF8001 \
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/lib/ionic/fonts \
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/lib/ionic/css \
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/lib/ionic/version.json \
@@ -109,6 +110,7 @@
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/lib/ionic/scss/ionicons/_ionicons-font.scss \
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/lib/ionic/scss/ionicons/_ionicons-animation.scss \
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/lib/ionic/scss/ionicons/_ionicons-variables.scss \
+/home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/lib/nRF8001/UART.js \
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/plugins/com.evothings.ble \
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/plugins/org.apache.cordova.device \
 /home/aalbino/Projects/imuduino-btle/Cordova/BluetoothLock/platforms/android/assets/www/plugins/com.ionic.keyboard \
