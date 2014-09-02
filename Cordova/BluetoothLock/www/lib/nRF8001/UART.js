@@ -1,8 +1,12 @@
 /**
+ * The nRF8001 'UART' object, see www/js/app.js and www/index.html to see 
+ * how it's used.
  * 
- * @todo Implement notify()
- * @todo Implement read()
+ * Run the `adb logcat` command from your terminal to view output, as 
+ * we are still having issues w/ the ionic UI not updating when a variable 
+ * changes (perhaps we need to manually force angular to $digest?)
  * 
+ * @author Femtoduino.com
  */
 
 angular.module('nRF8001', ['ionic'])
