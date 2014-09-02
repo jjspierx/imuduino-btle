@@ -84,12 +84,14 @@ angular.module('starter', ['ionic', 'nRF8001'])
 
 
           $scope.debug = 'Main!';
+          $scope.received_data = '';
+          
           $scope.UART = UART;
           $scope.sendData = function (device) {
             console.log('Writing!!!');
-            device.write([49]);
+            device.write([49]); // ASCII character '1' is decimal 49.
           };
-
+          
           ionic.ready(function() {
             $scope.debug = 'ready!';
 

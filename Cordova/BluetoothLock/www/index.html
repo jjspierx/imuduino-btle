@@ -67,6 +67,11 @@
           <div>
             Send a 1 to nRF8001: <a href="" class="button" ng-click="sendData(device)">Go</a>
           </div>
+          <div>
+            Received from nRF8001:
+            <div>{{UART.readQueue.length}}</div>
+            <div>{{UART.readQueue | json}}</div>
+          </div>
         </ion-item>
       </ion-list>
     </ion-content>

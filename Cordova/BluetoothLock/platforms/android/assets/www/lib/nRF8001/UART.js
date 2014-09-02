@@ -8,7 +8,7 @@
 angular.module('nRF8001', ['ionic'])
 
   // Here's our representation of a Device.
-  .factory('nRF8001.Device', [function() {
+  .factory('nRF8001.Device', ['$q', function($q) {
     var Device = function (ble, device) {
       this._device = device;
       this._connectInfo = null;
@@ -25,6 +25,8 @@ angular.module('nRF8001', ['ionic'])
       
       this._uartService = null;
       this._readHandle = null;
+      this._readDescriptor = null;
+      
       this._writeHandle = null;
       
       this.readQueue = [];
@@ -39,6 +41,7 @@ angular.module('nRF8001', ['ionic'])
           device.address,
           function(connectInfo) {
             
+            console.log("\n\n\t * * * CONNECT() state is " + connectInfo.state + " * * *\n\n");
             if (connectInfo.state == 2) { // Connected
               self.isConnected = true;
               self.isUARTReady = false;
@@ -64,10 +67,29 @@ angular.module('nRF8001', ['ionic'])
                           service.characteristics = characteristics;
                           for (c in service.characteristics) {
                             var characteristic = service.characteristics[c];
-                            console.log("\tchar UUID:" + characteristic.uuid);
+                            
                             if (characteristic.uuid === self.uuidRX) {
                               // Found the RX characteristic
                               self._readHandle = characteristic.handle;
+                              
+                              // Enable notifications for the RX characteristic.
+                              self.ble.descriptors(
+                                self._deviceHandle,
+                                self._readHandle,
+                                function (descriptors) {
+                                  console.log("\n\nGot Descriptors >>>> "+ JSON.stringify(descriptors) + "\n\n<<<<");
+                                  if (descriptors.length > 0) {
+                                    // We should only have one (1) descriptor.
+                                    
+                                    self._readDescriptor = descriptors[0];
+                                    self.enableNotification( self._readHandle );
+                                  }
+                                },
+                                function (errorCode) {
+                                  console.log('Call to .descriptors() failed: ' + errorCode);
+                                }
+                              );
+                              
                             }
 
                             if (characteristic.uuid === self.uuidTX) {
@@ -92,7 +114,7 @@ angular.module('nRF8001', ['ionic'])
             }
           },
           function(errorCode) {
-            self.debug.push('ble.connect() error');
+            
             console.log('ble.connect() error: ' + errorCode);
           }
         );
@@ -105,19 +127,70 @@ angular.module('nRF8001', ['ionic'])
         self.ble.close(self._device.deviceHandle);
         
         self._connectInfo = null;
+        self._readDescriptors = [];
+        self._readHandle = null;
+        self._writeHandle = null;
+        self._uartService = null;
         
       };
       
-      self.onNotify = function () {
+      self.onNotify = function (data) {
         /**
          * @todo Implement notify() event handling.
          */
       };
       
       self.read = function () {
-        /**
-         * @todo Implement notify() event handling, then implement read()
-         */
+        var result = null;
+        if (self.readQueue.length > 0) {
+          result = self.readQueue.shift();
+        }
+        
+        return result;
+      };
+      
+      self.enableNotification = function (characteristicHandle) {
+        console.log("\n\nreadDescriptor:\n" + JSON.stringify( self._readDescriptor ));
+        // Turn on notifications
+        self.ble.writeDescriptor(
+          self._deviceHandle,
+          self._readDescriptor.handle,
+          new Uint8Array([1,0])
+        );
+        // Start reading notifications
+        self.ble.enableNotification(
+          self._deviceHandle,
+          characteristicHandle,
+          function (rawData) {
+            // Ok
+            /**
+             * We've been notified of incomming data! Read it!
+             */
+            var data = self.ble.fromUtf8(rawData);
+            
+            self.readQueue.push(data);
+            console.log('#### enableNotification()->(callback) called:' + JSON.stringify(data) );
+            
+          },
+          function (errorCode) {
+            console.log('Call to .enableNotification() failed: ' + errorCode);
+          }
+        );
+      };
+      
+      self.disableNotification = function (characteristicHandle) {
+        self.ble.disableNotification(
+          self._deviceHandle,
+          characteristicHandle,
+          function (data) {
+            /**
+             * @todo Should we do something here? Perhaps a callback?
+             */
+          },
+          function (errorCode) {
+            console.log('Call to .disableNotification() failed: ' + errorCode);
+          }
+        );
       };
       /**
        * Write data to BLE device. 20 bytes at a time, max.
@@ -202,7 +275,7 @@ angular.module('nRF8001', ['ionic'])
           for (var i = 0; i < self.scannedDevices.length; i++) {
 //            self.close(self.scannedDevices[i]);
             var d = self.scannedDevices[i];
-            d.close();
+            d.disconnect();
           }
         }
       };
