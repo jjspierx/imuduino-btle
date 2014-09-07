@@ -1,8 +1,12 @@
 /**
+ * The nRF8001 'UART' object, see www/js/app.js and www/index.html to see 
+ * how it's used.
  * 
- * @todo Implement notify()
- * @todo Implement read()
+ * Run the `adb logcat` command from your terminal to view output, as 
+ * we are still having issues w/ the ionic UI not updating when a variable 
+ * changes (perhaps we need to manually force angular to $digest?)
  * 
+ * @author Femtoduino.com
  */
 
 angular.module('nRF8001', ['ionic'])
@@ -28,6 +32,8 @@ angular.module('nRF8001', ['ionic'])
       this._readDescriptor = null;
       
       this._writeHandle = null;
+      
+      this.readCallback = null;
       
       this.readQueue = [];
       this.writeQueue = [];
@@ -134,12 +140,6 @@ angular.module('nRF8001', ['ionic'])
         
       };
       
-      self.onNotify = function (data) {
-        /**
-         * @todo Implement notify() event handling.
-         */
-      };
-      
       self.read = function () {
         var result = null;
         if (self.readQueue.length > 0) {
@@ -169,6 +169,10 @@ angular.module('nRF8001', ['ionic'])
             var data = self.ble.fromUtf8(rawData);
             
             self.readQueue.push(data);
+            
+            if (self.readCallback) {
+              self.readCallback(data);
+            }
             console.log('#### enableNotification()->(callback) called:' + JSON.stringify(data) );
             
           },
@@ -198,24 +202,38 @@ angular.module('nRF8001', ['ionic'])
        */
       self.write = function (data, fnCallback) {
         
-        var uint8arrayData = new Uint8Array(data);
-        console.log('writing to: ', self._deviceHandle, self._writeHandle);
         self.ble.writeCharacteristic(
           self._deviceHandle,
           self._writeHandle,
-          uint8arrayData,
-          function() {
-            console.log('WRITE SUCCESS');
-            // If a callback was provided, call it!
+          data,
+          function () {
+            console.log("\n\n * * * WRITE SUCCESS * * *\n\n");
             if (fnCallback) {
               fnCallback();
             }
           },
-          function(errorCode) {
+          function (errorCode) {
             console.log('BLE writeCharacteristic to UART TX failed! error: ' + errorCode);
           }
         );
-      
+//        var uint8arrayData = new Uint8Array(data);
+//        console.log('writing to: ' + self._deviceHandle + ':' + self._writeHandle);
+//        self.ble.writeCharacteristic(
+//          self._deviceHandle,
+//          self._writeHandle,
+//          uint8arrayData,
+//          function() {
+//            console.log('WRITE SUCCESS');
+//            // If a callback was provided, call it!
+//            if (fnCallback) {
+//              fnCallback();
+//            }
+//          },
+//          function(errorCode) {
+//            console.log('BLE writeCharacteristic to UART TX failed! error: ' + errorCode);
+//          }
+//        );
+//      
       };
     };
     
@@ -238,6 +256,8 @@ angular.module('nRF8001', ['ionic'])
       this.ble;
       this.scannedDevices = [];
       this.isScanning = false;
+      
+      this.readCallback = null;
 
       var self = this;
 
@@ -318,6 +338,10 @@ angular.module('nRF8001', ['ionic'])
         self.ble.startScan(
           function(device) {
             var newDevice = new Device(self.ble, device);
+            
+            if (self.readCallback) {
+              newDevice.readCallback = self.readCallback;
+            }
             self.scannedDevices.push( newDevice );
             
             if (self.onDeviceFoundCallback) {

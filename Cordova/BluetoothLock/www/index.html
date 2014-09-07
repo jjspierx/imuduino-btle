@@ -57,20 +57,24 @@
       
       
       <ion-list id="found-devices">
-        <ion-item ng-repeat="device in UART.scannedDevices" ng-click="device.connect()">
+        <ion-item ng-repeat="device in UART.scannedDevices">
           <strong>{{device._device.name}}</strong><br />
           {{device._device.address}}<br />
           {{device._device.rssi}}<br />
           <div style="background:rgb(0,255,0); height:20px; width:{{getRssiWidth(device._device)}}%"></div>
+          <a href="" class="button icon-left ion-open" ng-click="device.connect()">Connect</a>
           <a href="" class="button icon-left ion-close" ng-click="device.disconnect()">Disconnect</a>
           <br />
-          <div>
-            Send a 1 to nRF8001: <a href="" class="button" ng-click="sendData(device)">Go</a>
+          <div class="list">
+            <label class="item item-input">
+              <input type="text" placeholder="Input Code" ng-model="send_data" />
+            </label>
           </div>
+          <button class="button" ng-click="sendData(device)">Unlock</button>
           <div>
-            Received from nRF8001:
-            <div>{{UART.readQueue.length}}</div>
-            <div>{{UART.readQueue | json}}</div>
+            <label class="item item-input">
+              <input type="text" placelholder="Received data" disabled="disabled" ng-model="received_data" />
+            </label>
           </div>
         </ion-item>
       </ion-list>

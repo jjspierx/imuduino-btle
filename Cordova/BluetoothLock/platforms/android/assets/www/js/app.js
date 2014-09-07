@@ -82,14 +82,33 @@ angular.module('starter', ['ionic', 'nRF8001'])
         function($scope, ionic, UART) {
           console.log('MainCtrl()');
 
-
+          $scope.send_data = '';
           $scope.debug = 'Main!';
           $scope.received_data = '';
           
           $scope.UART = UART;
           $scope.sendData = function (device) {
-            console.log('Writing!!!');
-            device.write([49]); // ASCII character '1' is decimal 49.
+            
+            if (!$scope.send_data) {
+              $scope.send_data = 1234;
+            }
+            console.log("\n\n*********** SENDING: " + $scope.send_data);
+            
+            var packet = "u" + $scope.send_data + "\n";
+            var dataArray = [];
+            
+            for(var i = 0; i < packet.length; i++) {
+              dataArray.push( packet.charCodeAt(i) );
+            }
+            
+            var sendData = new Uint8Array(dataArray);
+            
+            console.log("\n\nData array length: ");
+            console.log(dataArray.length);
+            console.log("\n\n");
+            
+            device.write(sendData); // ASCII character '1' is decimal 49. Sending u1234
+        
           };
           
           ionic.ready(function() {
@@ -97,6 +116,10 @@ angular.module('starter', ['ionic', 'nRF8001'])
 
             // Start the UART service.
             $scope.UART.initialize($scope);
+            $scope.UART.readCallback = function (data) {
+              console.log("\n\n********* RECEIVED: " + data);
+              $scope.received_data = data;
+            };
             $scope.UART.onDeviceFoundCallback = function() {
               $scope.UART.stopScan();
             };
