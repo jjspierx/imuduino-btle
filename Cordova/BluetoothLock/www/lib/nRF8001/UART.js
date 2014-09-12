@@ -296,6 +296,8 @@ angular.module('nRF8001', ['ionic'])
 //            self.close(self.scannedDevices[i]);
             var d = self.scannedDevices[i];
             d.disconnect();
+            
+            delete self.scannedDevices[i];
           }
         }
       };

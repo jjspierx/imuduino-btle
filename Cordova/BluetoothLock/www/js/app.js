@@ -87,11 +87,17 @@ angular.module('starter', ['ionic', 'nRF8001'])
           $scope.received_data = '';
           
           $scope.UART = UART;
+          $scope.stopScan = function () {
+            $scope.UART.stopScan();
+            $scope.UART.closeAll();
+            $scope.$digest();
+          };
+          
           $scope.sendData = function (device) {
             
-            if (!$scope.send_data) {
-              $scope.send_data = 1234;
-            }
+//            if (!$scope.send_data) {
+//              $scope.send_data = 1234;
+//            }
             console.log("\n\n*********** SENDING: " + $scope.send_data);
             
             var packet = "u" + $scope.send_data + "\n";
@@ -108,6 +114,7 @@ angular.module('starter', ['ionic', 'nRF8001'])
             console.log("\n\n");
             
             device.write(sendData); // ASCII character '1' is decimal 49. Sending u1234
+            $scope.$digest();
         
           };
           
@@ -119,9 +126,11 @@ angular.module('starter', ['ionic', 'nRF8001'])
             $scope.UART.readCallback = function (data) {
               console.log("\n\n********* RECEIVED: " + data);
               $scope.received_data = data;
+              $scope.$digest();
             };
             $scope.UART.onDeviceFoundCallback = function() {
               $scope.UART.stopScan();
+              $scope.$digest();
             };
           });
 
