@@ -85,45 +85,11 @@ Let's create our project now!
 
 (For a more thorough reading on installation and set up, see the Ionic Framework installation guide at http://ionicframework.com/docs/guide/installation.html )
 
-# Create the 'bleUART' project #
 
-Go into whatever directory you want to save your project inside of, and create a new ionic project named 'bleUART' as follows:
-
-```
-ionic start bleUART blank
-```
-
-...This creates a new ionic project named 'bleUART', with a 'blank' template.
-
-Now go into the project directory named 'bleUART':
+We can checkout a copy of the example bleUART code from our github repository with the following command:
 
 ```
-cd bleUART
+git clone https://github.com/zrecommerce/imuduino-btle.git
 ```
 
-We will run the next couple of commands from within this folder.
-Let's add the platform we will be developing for:
-
-```
-ionic platform android
-```
-
-Finally, we install a "cordova-ble" plugin by evothings by running the following command:
-
-```
-cordova plugin add https://github.com/evothings/cordova-ble.git
-```
-
-Now we code.
-
-# Create the UI
-
-Browse to the bleUART/www folder, and open up index.html
-The index.html file contains the HTML markup for our application.
-
-We
-
-
-
-
-
+The sample bleUART project is located in the Cordova/bleUART/ folder. You may view and edit the HTML and script files in the Cordova/bleUART/www folder.
