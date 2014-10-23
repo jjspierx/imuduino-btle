@@ -52,15 +52,7 @@ aci_evt_opcode_t laststatus = ACI_EVT_DISCONNECTED;
 aci_evt_opcode_t status = laststatus;
 
 int raw_values[11];
-char str[512];
-float val[9];
-
-int i = 0;
-String strSection;
-char sendbuffersize;
-uint8_t sendbuffer[20];
-
-int mode = 0; // 0 = accel (default), 1 = gyro, 2 = mag, 3 = baro (temp and baro)
+//float ypr[3];
 
 // Set the FreeIMU object
 IMUduino my3IMU = IMUduino();
@@ -69,11 +61,11 @@ IMUduino my3IMU = IMUduino();
 void setup() {
 ////  Mouse.begin();
   
-  Serial.begin(9600);
+  Serial.begin(115200);
   while(!Serial);
   Wire.begin();
   
-  Serial.println(F("IMUduino Print echo demo"));
+  Serial.println(F("Adafruit Bluefruit Low Energy nRF8001 + FreeIMU Print echo demo"));
   
   delay(500);
   my3IMU.init(true);
@@ -85,27 +77,58 @@ void loop() {
   
   btleLoop();
   if (status == ACI_EVT_CONNECTED) {
+    /*
+    my3IMU.getYawPitchRoll(ypr);
+    char chrY[5];
+    char chrP[5];
+    char chrR[5];
     
-    my3IMU.getRawValues(raw_values);
+    dtostrf(ypr[0], 1, 1, &chrY[0]);
+    dtostrf(ypr[1], 1, 1, &chrP[0]);
+    dtostrf(ypr[2], 1, 1, &chrR[0]);
     
-    // Send raw IMU values to our app!
-    sprintf(str, "[%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d]", 
-      raw_values[0], 
-      raw_values[1], 
-      raw_values[2], 
-      raw_values[3], 
-      raw_values[4], 
-      raw_values[5], 
-      raw_values[6], 
-      raw_values[7], 
-      raw_values[8], 
-      raw_values[9], 
-      raw_values[10]
+    btleWrite(
+      String(chrY) + '|' +
+      String(chrP) + '|' +
+      String(chrR)
     );
+    */
     
-    // Our btleWrite() method handles spliting chars into 20-byte chunks
-    btleWrite(str);
-    delay(150);
+  	my3IMU.getRawValues(raw_values);
+  	
+  	btleWrite(
+  /*
+          // MPU6050
+          // ...accel
+          String(raw_values[0]) + '|' + 
+          String(raw_values[1]) + '|' + 
+          String(raw_values[2]) 
+          
+          + '|' + 
+          
+          // ...gyroscope
+          String(raw_values[3], HEX) + '|' + 
+          String(raw_values[4], HEX) + '|' + 
+          String(raw_values[5], HEX) 
+  
+          + '|' + 
+  */        
+          // HMC588L
+          // ...Triple axis compass
+          String(raw_values[6], HEX) + '|' + 
+          String(raw_values[7], HEX) + '|' + 
+          String(raw_values[8], HEX) 
+          
+          + '|' + 
+          
+          // MS5611
+          // ... Temperature
+          String(raw_values[9], HEX) + '|' + 
+          // ... Pressure
+          String(raw_values[10], HEX)
+          
+       );
+     
   }
 }
 
@@ -162,27 +185,14 @@ void btleLoop() {
 
 void btleWrite(String s) {
   // We need to convert the line to bytes, no more than 20 at this time
-    int len = s.length();
-    
-    for (i = 0; i < len; i+= 20) {
-      if (i > 0) {
-        btleLoop(); // We need to let our BTLE serial object poll, otherwise our Arduino sketch freezes up after about 3 to 6 write() calls.
-      }
-      strSection = s.substring(i, i + 20);
-      
-      strSection.getBytes(sendbuffer, 20);
-      
-      sendbuffersize = min(20, strSection.length());
-      
-      // write the data
-      BTLEserial.write(sendbuffer, sendbuffersize);
+  uint8_t sendbuffer[20];
+  s.getBytes(sendbuffer, 20);
+  char sendbuffersize = min(20, s.length());
 
-      sendbuffersize = NULL;
-      strSection = "";
-      
-    }
-    i = 0;
-    
+  Serial.print(F("\n* Sending -> \"")); Serial.print((char *)sendbuffer); Serial.println("\"");
+
+  // write the data
+  BTLEserial.write(sendbuffer, sendbuffersize);
 }
 
 byte * float2str(float arg) {
